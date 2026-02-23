@@ -21,10 +21,8 @@ const step = () => {
    Object.values(this.map.gameObjects).forEach(object => {
       object.update({
 
-         
       });  
       object.sprite.draw(this.ctx);
-
    })
 
   //layer alta//
@@ -40,6 +38,8 @@ step();
 
  init(){
   this.map = new OverworldMap(window.OverworldMaps.DemoRoom);
+  this.directionInput = new DirectionInput();
+  this.directionInput.init();
   this.startGameLoop();
  
 }
