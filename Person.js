@@ -2,9 +2,9 @@ class Person extends GameObject{
 
     constructor(config){
         super(config);
-        this.movingProgressRemaining= 32;
+        this.movingProgressRemaining = 0;
 
-this.direction="left"
+        this.isPlayerControlled = config.isPlayerControlled || false;
 
 this.directionUpdate= {
     "up": ["y",-1],
@@ -15,11 +15,16 @@ this.directionUpdate= {
     }
 update(state){
     this.updatePosition();
-}
 
+    if (this.isPlayerControlled && this.movingProgressRemaining === 0 && state.arrow) {
+        this.direction = state.arrow;
+        this.movingProgressRemaining = 16;
+    }
+}
+ 
     updatePosition(){
-if(this.movingProgressRemaining > 0 ){
-    const [property, change] = this.directionUpdate[this.direction]
+if (this.movingProgressRemaining > 0 ){
+    const [property, change] = this.directionUpdate[this.direction];
     this[property]+=change;
     this.movingProgressRemaining -= 1;
 }

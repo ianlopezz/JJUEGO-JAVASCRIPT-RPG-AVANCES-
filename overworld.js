@@ -20,7 +20,7 @@ const step = () => {
 
    Object.values(this.map.gameObjects).forEach(object => {
       object.update({
-
+        arrow: this.directionInput.direction
       });  
       object.sprite.draw(this.ctx);
    })
