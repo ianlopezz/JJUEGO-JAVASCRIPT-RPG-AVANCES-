@@ -1,14 +1,14 @@
 class Sprite {
   constructor(config) {
 
-    //Set up the image
+    //imagen
     this.image = new Image();
     this.image.src = config.src;
     this.image.onload = () => {
       this.isLoaded = true;
     }
 
-    //Shadow
+    //sombra
     this.shadow = new Image();
     this.useShadow = true; //config.useShadow || false
     if (this.useShadow) {
@@ -18,7 +18,7 @@ class Sprite {
       this.isShadowLoaded = true;
     }
 
-    //Configure Animation & Initial State
+    //ANIMACION
     this.animations = config.animations || {
       "idle-down" : [ [0,0] ],
       "idle-right": [ [0,1] ],
@@ -29,14 +29,14 @@ class Sprite {
       "walk-up"   : [ [1,2],[0,2],[3,2],[0,2], ],
       "walk-left" : [ [1,3],[0,3],[3,3],[0,3], ]
     }
-    this.currentAnimation = "idle-right"; // config.currentAnimation || "idle-down";
+    this.currentAnimation = "idle-right"; // animacion inicial
     this.currentAnimationFrame = 0;
 
     this.animationFrameLimit = config.animationFrameLimit || 8;
     this.animationFrameProgress = this.animationFrameLimit;
     
 
-    //Reference the game object
+    //game object call
     this.gameObject = config.gameObject;
   }
 
@@ -53,13 +53,13 @@ class Sprite {
   }
 
   updateAnimationProgress() {
-    //Downtick frame progress
+    //frame progress 
     if (this.animationFrameProgress > 0) {
       this.animationFrameProgress -= 1;
       return;
     }
 
-    //Reset the counter
+    //contador reset
     this.animationFrameProgress = this.animationFrameLimit;
     this.currentAnimationFrame += 1;
 

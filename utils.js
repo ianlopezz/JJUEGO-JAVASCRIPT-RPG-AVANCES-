@@ -2,6 +2,7 @@ const utils = {
   withGrid(n) {
     return n * 16;
   },
+  // tema de movimiento y events
   asGridCoord(x,y) {
     return `${x*16},${y*16}`
   },

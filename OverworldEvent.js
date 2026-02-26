@@ -14,7 +14,8 @@ class OverworldEvent {
       time: this.event.time
     })
     
-    //Set up a handler to complete when correct person is done walking, then resolve the event
+    //poner  handler pa completar, then resolver the event
+    
     const completeHandler = e => {
       if (e.detail.whoId === this.event.who) {
         document.removeEventListener("PersonStandComplete", completeHandler);
@@ -34,7 +35,7 @@ class OverworldEvent {
       retry: true
     })
 
-    //Set up a handler to complete when correct person is done walking, then resolve the event
+    //poner  handler pa completar, then resolve the event
     const completeHandler = e => {
       if (e.detail.whoId === this.event.who) {
         document.removeEventListener("PersonWalkingComplete", completeHandler);

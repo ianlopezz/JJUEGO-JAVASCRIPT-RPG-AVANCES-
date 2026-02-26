@@ -39,12 +39,12 @@ class OverworldMap {
       let object = this.gameObjects[key];
       object.id = key;
 
-      //TODO: determine if this object should actually mount
+      
       object.mount(this);
 
     })
   }
-
+// CINEMATICA
   async startCutscene(events) {
     this.isCutscenePlaying = true;
 
@@ -58,6 +58,7 @@ class OverworldMap {
 
     this.isCutscenePlaying = false;
   }
+  // WALLS || 
 
   addWall(x,y) {
     this.walls[`${x},${y}`] = true;
@@ -107,6 +108,7 @@ window.OverworldMaps = {
         ]
       }),
     },
+    //WALLS 2||
     walls: {
       [utils.asGridCoord(7,6)] : true,
       [utils.asGridCoord(8,6)] : true,

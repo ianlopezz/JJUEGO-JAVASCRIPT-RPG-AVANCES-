@@ -26,27 +26,26 @@ update(){
 }
 async doBehaviorEvent(map) { 
 
-    //Don't do anything if there is a more important cutscene or I don't have config to do anything
-    //anyway.
+   //evento
     if (map.isCutscenePlaying || this.behaviorLoop.length === 0) {
       return;
     }
 
-    //Setting up our event with relevant info
+    //info del evento
     let eventConfig = this.behaviorLoop[this.behaviorLoopIndex];
     eventConfig.who = this.id;
 
-    //Create an event instance out of our next event config
+    //enveto config
     const eventHandler = new OverworldEvent({ map, event: eventConfig });
     await eventHandler.init(); 
 
-    //Setting the next event to fire
+    //setting next evento 
     this.behaviorLoopIndex += 1;
     if (this.behaviorLoopIndex === this.behaviorLoop.length) {
       this.behaviorLoopIndex = 0;
     } 
 
-    //Do it again!
+    //again otra ve 
     this.doBehaviorEvent(map);
     
 

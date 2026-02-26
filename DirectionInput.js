@@ -2,7 +2,7 @@ class DirectionInput {
 constructor() {
 this.heldDirections = [];
 
-this.map={
+this.map={ //MOVIMIENTO !!!!
     "ArrowUp": "up",
       "KeyW": "up",
       "ArrowDown": "down",
