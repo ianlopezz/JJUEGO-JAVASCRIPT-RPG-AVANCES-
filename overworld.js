@@ -8,13 +8,13 @@ class Overworld {
 
   startGameLoop() {
     const step = () => {
-      //Clear off the canvas
+    
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      //Establish the camera person
+      //camara para el personaje
       const cameraPerson = this.map.gameObjects.hero;
 
-      //Update all objects
+      //actualizar obj
       Object.values(this.map.gameObjects).forEach(object => {
         object.update({
           arrow: this.directionInput.direction,

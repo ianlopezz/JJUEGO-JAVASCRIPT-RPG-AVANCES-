@@ -1,7 +1,7 @@
 class Sprite {
   constructor(config) {
 
-    //Set up the image
+    //set imagen para sprite
     this.image = new Image();
     this.image.src = config.src;
     this.image.onload = () => {
@@ -36,7 +36,7 @@ class Sprite {
     this.animationFrameProgress = this.animationFrameLimit;
     
 
-    //Reference the game object
+    //señala GameObject
     this.gameObject = config.gameObject;
   }
 
@@ -53,13 +53,13 @@ class Sprite {
   }
 
   updateAnimationProgress() {
-    //Downtick frame progress
+    //frame resta
     if (this.animationFrameProgress > 0) {
       this.animationFrameProgress -= 1;
       return;
     }
 
-    //Reset the counter
+    //Reset de contador de px
     this.animationFrameProgress = this.animationFrameLimit;
     this.currentAnimationFrame += 1;
 

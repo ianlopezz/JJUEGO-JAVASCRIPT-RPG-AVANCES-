@@ -59,6 +59,7 @@ onComplete: () => resolve()
 })
 message.init(document.querySelector(".game-container"))
   }
+//transicion cambio de mapa
 
   changeMap(resolve) {
 

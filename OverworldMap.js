@@ -41,7 +41,7 @@ class OverworldMap {
       let object = this.gameObjects[key];
       object.id = key;
 
-      //mount data
+      //cargando data
       object.mount(this);
 
     })
@@ -74,7 +74,7 @@ class OverworldMap {
       this.startCutscene(match.talking[0].events)
     }
   }
-
+// cinematica mov segun pas
   checkForFootstepCutscene() {
     const hero = this.gameObjects["hero"];
     const match = this.cutsceneSpaces[ `${hero.x},${hero.y}` ];
@@ -193,6 +193,8 @@ window.OverworldMaps = {
           {
             events: [
               { type: "textMessage", text: "klk menol, quiere celvesa ", faceHero:"npcB" },
+              
+
             ]
           }
         ]

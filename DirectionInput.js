@@ -14,7 +14,7 @@ this.map={ //MOVIMIENTO !!!!
 
                 }
 }
-
+// variable de direccion 
 get direction() {
     return this.heldDirections[0];
 }
@@ -22,7 +22,7 @@ get direction() {
 
 
 init() {
-
+//keydowns
     document.addEventListener("keydown", e => {
       const dir = this.map[e.code];
       if (dir && this.heldDirections.indexOf(dir) === -1) {

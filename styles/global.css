@@ -1,11 +1,11 @@
 :root {
-  --border-color: #3903db;
-  --dialog-background: #FFF3B4;
+  --border-color: #e7e1fc;
+  --dialog-background: #ec0101;
 
-  --menu-background: #FFE8D2;
-  --menu-border-color: #A48465;
-  --menu-font-color: #3A160D;
-  --menu-selected-background: #7fc2ff;
+  --menu-background: #ffffff;
+  --menu-border-color: #ffffff;
+  --menu-font-color: #000000;
+  --menu-selected-background: #ffffff;
 }
 
 * {
@@ -24,7 +24,7 @@ body {
   width: 352px;
   height: 198px;
   margin: 0 auto;
-  outline: 1px solid #fff;
+  outline: 1px solid #ffffff;
 
   transform: scale(3) translateY(50%);
 }

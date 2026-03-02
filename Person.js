@@ -67,7 +67,7 @@ class Person extends GameObject {
       this.movingProgressRemaining -= 1;
 
       if (this.movingProgressRemaining === 0) {
-        //We finished the walk!
+        //movimiento fnz
         utils.emitEvent("PersonWalkingComplete", {
           whoId: this.id
         })

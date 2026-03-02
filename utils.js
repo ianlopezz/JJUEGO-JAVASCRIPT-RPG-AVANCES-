@@ -1,6 +1,7 @@
 const utils = {
   withGrid(n) {
-    return n * 16;
+    return n * 16; // hacer que las coords de casilla se multipliquen x 16 y tengan valores fijos
+  
   },
   // tema de movimiento y events
   asGridCoord(x,y) {
