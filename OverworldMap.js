@@ -99,8 +99,8 @@ class OverworldMap {
 
 window.OverworldMaps = {
   DemoRoom: {
-    lowerSrc: "./imagenes/mapas/DemoLower.png",
-    upperSrc: "./imagenes/mapas/DemoUpper.png",
+    lowerSrc: "/imagenes/mapas/DemoLower.png",
+    upperSrc: "/imagenes/mapas/DemoUpper.png",
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,
@@ -110,7 +110,7 @@ window.OverworldMaps = {
       npcA: new Person({
         x: utils.withGrid(7),
         y: utils.withGrid(9),
-        src: ".imagenes/personajes/npc1.png",
+        src: "/imagenes/personajes/npc1.png",
         behaviorLoop: [
           // { type: "walk",  direction: "left", time: 800 },
           { type: "stand",  direction: "up", time: 800 },
@@ -137,7 +137,7 @@ window.OverworldMaps = {
       npcB: new Person({
         x: utils.withGrid(8),
         y: utils.withGrid(5),
-        src: "./imagenes/personajes/npc2.png",
+        src: "/imagenes/personajes/npc2.png",
         // behaviorLoop: [
         //   { type: "walk",  direction: "left" },
         //   { type: "stand",  direction: "up", time: 800 },
@@ -177,8 +177,8 @@ window.OverworldMaps = {
     
   },
   Kitchen: {
-    lowerSrc: ".imagenes/mapas/KitchenLower.png",
-    upperSrc: "./imagenes/mapas/KitchenUpper.png",
+    lowerSrc: "imagenes/mapas/KitchenLower.png",
+    upperSrc: "/imagenes/mapas/KitchenUpper.png",
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,
@@ -188,7 +188,7 @@ window.OverworldMaps = {
       npcB: new Person({
         x: utils.withGrid(10),
         y: utils.withGrid(8),
-        src: "./imagenes/personajes/npc3.png",
+        src: "/imagenes/personajes/npc3.png",
         talking: [
           {
             events: [

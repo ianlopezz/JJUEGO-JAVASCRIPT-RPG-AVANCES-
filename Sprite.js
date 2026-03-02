@@ -12,7 +12,7 @@ class Sprite {
     this.shadow = new Image();
     this.useShadow = true; //config.useShadow || false
     if (this.useShadow) {
-      this.shadow.src = "./imagenes/personajes/shadow.png";
+      this.shadow.src = "/imagenes/personajes/shadow.png";
     }
     this.shadow.onload = () => {
       this.isShadowLoaded = true;
@@ -32,7 +32,7 @@ class Sprite {
     this.currentAnimation = "idle-right"; // config.currentAnimation || "idle-down";
     this.currentAnimationFrame = 0;
 
-    this.animationFrameLimit = config.animationFrameLimit || 8;
+    this.animationFrameLimit = config.animationFrameLimit || 16;
     this.animationFrameProgress = this.animationFrameLimit;
     
 

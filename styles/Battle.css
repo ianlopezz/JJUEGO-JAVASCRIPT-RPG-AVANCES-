@@ -1,0 +1,49 @@
+.Battle {
+position:absolute;
+left: 0;
+right: 0;
+top: 0;
+bottom: 0;
+background-image: url(/imagenes/mapas/StreetBattle.png);
+background-size: cover;
+image-rendering: pixelated;
+
+}
+
+.Battle_Hero, .Battle_Enemy{
+
+position:absolute;
+transform: scale(2);
+width: 32px;
+height: 32px;
+overflow: hidden;
+background-image: url(/imagenes/personajes/shadow.png) 
+no-repeat no-repeat;
+
+}
+
+.Battle_Hero img , .Battle_Enemy img{
+
+pointer-events: none;
+
+
+} 
+
+.Battle_Hero{
+bottom: 47px;
+left: 1px;
+
+}
+
+
+
+.Battle_Hero img {
+transform: translateY(-64px); /* nudge hero spritesheet*/
+
+
+
+}
+.Battle_Enemy{
+top: 42px;
+right: -1px;
+}
