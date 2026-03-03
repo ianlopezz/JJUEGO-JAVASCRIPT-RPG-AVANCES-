@@ -61,7 +61,7 @@ message.init(document.querySelector(".game-container"))
   }
 //transicion cambio de mapa
 
-  changeMap(resolve) {
+ changeMap(resolve) {
 
     const sceneTransition = new SceneTransition();
     sceneTransition.init(document.querySelector(".game-container"), () => {
@@ -73,15 +73,69 @@ message.init(document.querySelector(".game-container"))
     })
   }
 
- battle(resolve) {
-    const battle = new Battle({
-      onComplete: () => {
-        resolve();
-      }
-    })
-    battle.init(document.querySelector(".game-container"));
-
+  setFlag(resolve) {
+    this.map.overworld.storyFlags[this.event.flag] = true;
+    resolve();
   }
+
+  screamer(resolve) {
+    if (this.event.setFlag && this.map.overworld.storyFlags[this.event.setFlag]) {
+      resolve();
+      return;
+    }
+
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.background = "black";
+    overlay.style.zIndex = "9999";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+
+    const video = document.createElement("video");
+    video.src = this.event.videoSrc || "";
+    video.autoplay = true;
+    video.playsInline = true;
+    video.controls = false;
+    video.style.width = "100vw";
+    video.style.height = "100vh";
+    video.style.objectFit = "cover";
+
+    const cleanup = () => {
+      video.pause();
+      overlay.remove();
+      if (this.event.setFlag) {
+        this.map.overworld.storyFlags[this.event.setFlag] = true;
+      }
+      resolve();
+    };
+
+    video.addEventListener("ended", cleanup, { once: true });
+    video.addEventListener("error", cleanup, { once: true });
+
+    overlay.appendChild(video);
+    document.body.appendChild(overlay);
+
+    video.play().catch(cleanup);
+  }
+
+ battle(resolve) {
+  this.map.overworld.pauseBackgroundMusic();
+
+  const battle = new Battle({
+    enemyId: this.event.enemyId,
+    onComplete: (result) => {
+      if (result === "win" && this.event.winFlag) {
+        this.map.overworld.storyFlags[this.event.winFlag] = true;
+      }
+      this.map.overworld.resumeBackgroundMusic();
+      resolve();
+    }
+  });
+
+  battle.init(document.querySelector(".game-container"));
+}
 
   init() {
     return new Promise(resolve => {

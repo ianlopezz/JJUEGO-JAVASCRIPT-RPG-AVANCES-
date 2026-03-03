@@ -1,49 +1,139 @@
 .Battle {
-position:absolute;
-left: 0;
-right: 0;
-top: 0;
-bottom: 0;
-background-image: url(/imagenes/mapas/StreetBattle.png);
-background-size: cover;
-image-rendering: pixelated;
-
+  position: absolute;
+  inset: 0;
+  background-image: url("/imagenes/mapas/StreetBattle.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 100;
 }
 
-.Battle_Hero, .Battle_Enemy{
-
-position:absolute;
-transform: scale(2);
-width: 32px;
-height: 32px;
-overflow: hidden;
-background-image: url(/imagenes/personajes/shadow.png) 
-no-repeat no-repeat;
-
+.battle-scene {
+  position: relative;
+  flex: 1;
 }
 
-.Battle_Hero img , .Battle_Enemy img{
-
-pointer-events: none;
-
-
-} 
-
-.Battle_Hero{
-bottom: 47px;
-left: 1px;
-
+.enemy-area {
+  position: absolute;
+  top: 36px;
+  right: 10px;
+  text-align: center;
+  z-index: 2;
 }
 
-
-
-.Battle_Hero img {
-transform: translateY(-64px); /* nudge hero spritesheet*/
-
-
-
+.player-area {
+  position: absolute;
+  bottom: -85px;
+  left: 0px;
+  text-align: center;
+  z-index: 2;
 }
-.Battle_Enemy{
-top: 42px;
-right: -1px;
+
+.enemy-sprite,
+.player-sprite {
+  width: 150px;
+  image-rendering: pixelated;
+  transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.hp-bar {
+  width: 150px;
+  height: 12px;
+  background: #444;
+  border: 2px solid white;
+  margin-bottom: 6px;
+}
+
+.hp-fill {
+  height: 100%;
+  background: limegreen;
+  width: 100%;
+  transition: width 0.3s ease;
+}
+
+.hp-text {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px #000;
+  margin-bottom: 8px;
+}
+
+.battle-ui {
+  background: #111;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.battle-message {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px #000;
+}
+
+.battle-overlay-message {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 1px 2px #000;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid #fff;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.SubmissionMenu button {
+  padding: 8px 16px;
+  border: 1px solid #fff;
+  background: #222;
+  color: #fff;
+  cursor: pointer;
+}
+
+.super-power-button {
+  padding: 10px 18px;
+  border: 2px solid #fff;
+  background: #b30000;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  animation: pulse-super 0.9s infinite alternate;
+}
+
+@keyframes pulse-super {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+.battle-scene.is-attacking-player .player-sprite {
+  transform: translate(24px, -6px) scale(1.05);
+}
+
+.battle-scene.is-attacking-enemy .enemy-sprite {
+  transform: translate(-24px, 6px) scale(1.05);
+}
+
+.battle-scene.is-hit-player .player-sprite {
+  filter: brightness(1.7) saturate(0.4);
+  transform: translate(-8px, 0);
+}
+
+.battle-scene.is-hit-enemy .enemy-sprite {
+  filter: brightness(1.7) saturate(0.4);
+  transform: translate(8px, 0);
 }
