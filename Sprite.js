@@ -1,14 +1,14 @@
 class Sprite {
   constructor(config) {
 
-    //set imagen para sprite
+    // Carga imagen principal del personaje/objeto.
     this.image = new Image();
     this.image.src = config.src;
     this.image.onload = () => {
       this.isLoaded = true;
     }
 
-    //Shadow
+    // Sombra debajo del sprite para mejorar profundidad visual.
     this.shadow = new Image();
     this.useShadow = true; //config.useShadow || false
     if (this.useShadow) {
@@ -18,7 +18,7 @@ class Sprite {
       this.isShadowLoaded = true;
     }
 
-    //Configure Animation & Initial State
+    // Tabla de animaciones por estado y direccion.
     this.animations = config.animations || {
       "idle-down" : [ [0,0] ],
       "idle-right": [ [0,1] ],
@@ -37,6 +37,7 @@ class Sprite {
     
 
     //señala GameObject
+    // Referencia al GameObject duenio del sprite (posicion/estado).
     this.gameObject = config.gameObject;
   }
 
@@ -45,6 +46,7 @@ class Sprite {
   }
 
   setAnimation(key) {
+    // Si cambia la animacion, reinicia frame y contador.
     if (this.currentAnimation !== key) {
       this.currentAnimation = key;
       this.currentAnimationFrame = 0;
@@ -53,13 +55,13 @@ class Sprite {
   }
 
   updateAnimationProgress() {
-    //frame resta
+    // Cuenta frames hasta avanzar al siguiente cuadro de animacion.
     if (this.animationFrameProgress > 0) {
       this.animationFrameProgress -= 1;
       return;
     }
 
-    //Reset de contador de px
+    // Reinicia contador y avanza al siguiente frame.
     this.animationFrameProgress = this.animationFrameLimit;
     this.currentAnimationFrame += 1;
 
@@ -72,9 +74,11 @@ class Sprite {
   
 
   draw(ctx, cameraPerson) {
+    // Convierte posicion del mundo a pantalla segun camara.
     const x = this.gameObject.x - 8 + utils.withGrid(10.5) - cameraPerson.x;
     const y = this.gameObject.y - 18 + utils.withGrid(6) - cameraPerson.y;
 
+    // Dibuja sombra y luego el sprite recortado del spritesheet.
     this.isShadowLoaded && ctx.drawImage(this.shadow, x, y);
 
 

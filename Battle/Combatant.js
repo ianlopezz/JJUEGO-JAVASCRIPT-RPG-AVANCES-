@@ -1,5 +1,6 @@
 class Combatant {
   constructor(config) {
+    // Datos base de cada combatiente.
     this.name = config.name;
     this.hp = config.hp;
     this.maxHp = config.maxHp;
@@ -9,6 +10,7 @@ class Combatant {
   }
 
   takeDamage(amount) {
+    // Aplica dano y marca KO si llega a 0 HP.
     this.hp -= amount;
 
     if (this.hp <= 0) {

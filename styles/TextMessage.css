@@ -1,4 +1,5 @@
 .TextMessage {
+  /* Caja de dialogo fija en la parte inferior */
   position: absolute;
   left: 0;
   right: 0;
@@ -10,17 +11,21 @@
   color: var(--menu-font-color);
 }
 .TextMessage_p {
+  /* Texto principal del dialogo */
   margin: 0;
   font-size: 12px;
 }
 .TextMessage span {
+  /* Cada letra empieza oculta para efecto typewriter */
   opacity: 0;
 }
 .TextMessage span.revealed {
+  /* Letra ya revelada */
   opacity: 1;
 }
 
 .TextMessage_button {
+  /* Boton para avanzar/cerrar dialogo */
   margin: 0;
   font-size: 8px;
   font-family: sans-serif;

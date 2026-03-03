@@ -1,4 +1,5 @@
 .Battle {
+  /* Overlay completo de batalla por encima del overworld */
   position: absolute;
   inset: 0;
   background-image: url("/imagenes/mapas/StreetBattle.png");
@@ -12,11 +13,13 @@
 }
 
 .battle-scene {
+  /* Zona visual principal (sprites + mensajes flotantes) */
   position: relative;
   flex: 1;
 }
 
 .enemy-area {
+  /* Posicion del enemigo y su HUD */
   position: absolute;
   top: 36px;
   right: 10px;
@@ -25,6 +28,7 @@
 }
 
 .player-area {
+  /* Posicion del jugador y su HUD */
   position: absolute;
   bottom: -85px;
   left: 0px;
@@ -34,12 +38,14 @@
 
 .enemy-sprite,
 .player-sprite {
+  /* Sprites pixelados con transicion para animaciones de ataque/golpe */
   width: 150px;
   image-rendering: pixelated;
   transition: transform 0.16s ease, filter 0.16s ease;
 }
 
 .hp-bar {
+  /* Marco de barra de vida */
   width: 150px;
   height: 12px;
   background: #444;
@@ -48,6 +54,7 @@
 }
 
 .hp-fill {
+  /* Relleno de vida dinamico (cambia ancho via JS) */
   height: 100%;
   background: limegreen;
   width: 100%;
@@ -63,6 +70,7 @@
 }
 
 .battle-ui {
+  /* Panel inferior para menu y mensajes de turno */
   background: #111;
   padding: 20px;
   display: flex;
@@ -79,6 +87,7 @@
 }
 
 .battle-overlay-message {
+  /* Mensaje flotante temporal sobre la escena */
   position: absolute;
   top: 12px;
   left: 50%;
@@ -105,6 +114,7 @@
 }
 
 .super-power-button {
+  /* Boton especial de fase final */
   padding: 10px 18px;
   border: 2px solid #fff;
   background: #b30000;
@@ -116,24 +126,29 @@
 }
 
 @keyframes pulse-super {
+  /* Efecto de pulso continuo para enfatizar boton */
   from { transform: scale(1); }
   to { transform: scale(1.08); }
 }
 
 .battle-scene.is-attacking-player .player-sprite {
+  /* Desplazamiento visual cuando ataca jugador */
   transform: translate(24px, -6px) scale(1.05);
 }
 
 .battle-scene.is-attacking-enemy .enemy-sprite {
+  /* Desplazamiento visual cuando ataca enemigo */
   transform: translate(-24px, 6px) scale(1.05);
 }
 
 .battle-scene.is-hit-player .player-sprite {
+  /* Flash/retroceso al recibir golpe */
   filter: brightness(1.7) saturate(0.4);
   transform: translate(-8px, 0);
 }
 
 .battle-scene.is-hit-enemy .enemy-sprite {
+  /* Flash/retroceso al recibir golpe */
   filter: brightness(1.7) saturate(0.4);
   transform: translate(8px, 0);
 }

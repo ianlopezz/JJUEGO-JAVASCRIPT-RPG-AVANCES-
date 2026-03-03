@@ -2,12 +2,13 @@
 <html>
   <head>
     <head>
+    <!-- Metadatos y carga de estilos base de juego -->
     <title>rpg</title>
     <link href="/styles/global.css" type="text/css" rel="stylesheet">
     <link href="/styles/TextMessage.css" type="text/css" rel="stylesheet">
     <link href="/styles/SceneTransition.css" type="text/css" rel="stylesheet">
     
-    <!-- battle css -->
+    <!-- Estilos del modo batalla -->
     <link href="/styles/Battle.css" type="text/css" rel="stylesheet">
     <link href="/styles/Combatant.css" type="text/css" rel="stylesheet">
     <link href="/styles/SubmissionMenu.css" type="text/css" rel="stylesheet">
@@ -18,11 +19,12 @@
 
   </head>
   <body>
+    <!-- Contenedor principal del juego (canvas escalado por CSS) -->
     <div class="game-container">
       <canvas class="game-canvas" width="352" height="198"></canvas>
     </div>
 
-    <!-- <Scripts > -->
+    <!-- Scripts del overworld -->
  <script src="/utils.js"></script>
     
  <script src="/DirectionInput.js"></script>
@@ -49,7 +51,7 @@
 
   
 
-    <!-- Battle -->
+    <!-- Scripts del sistema de batalla -->
 
     <script src="/Battle/Battle.js"></script>
 

@@ -1,12 +1,14 @@
 class Battle {
 
   constructor(config) {
+    // Configuracion general de combate y callbacks.
     this.enemyId = config.enemyId;
     this.activeCombatants = {};
     this.onComplete = config.onComplete || (() => {});
     this.turnDelay = 2000;
     this.impactDelay = 260;
     this.victoryDelay = 13000;
+    // Audio de impacto, victoria y musica de batalla.
     this.hitSound = new Audio("/Battle/Bonk%20Sound%20Effect.mp3");
     this.hitSound.preload = "auto";
     this.victorySound = new Audio("/Battle/victoria.mp3");
@@ -17,6 +19,7 @@ class Battle {
     this.battleMusic.loop = true;
     this.battleMusic.volume = 0.6;
     this.battleMusic.preload = "auto";
+    // Estado para detectar combinacion de giro (skip secreto).
     this.spinProgress = { cwIndex: 0, ccwIndex: 0, cwCount: 0, ccwCount: 0 };
     this.hasSkipped = false;
     this.immortalPhaseTriggered = false;
@@ -25,6 +28,7 @@ class Battle {
   }
 
 init(container) {
+  // Arranque del combate: musica, inputs, UI y primer turno.
   this.container = container;
   this.startBattleMusic();
   document.addEventListener("keydown", this.boundSpinHandler);
@@ -35,6 +39,7 @@ init(container) {
 }
 
 startTurn() {
+  // Turno del jugador: limpia UI y abre menu de accion.
   const battleUI = this.element.querySelector(".battle-ui");
   battleUI.innerHTML = "";
   this.clearOverlayMessage();
@@ -43,6 +48,7 @@ startTurn() {
     combatant: this.activeCombatants.player,
     onComplete: (action) => {
       if (action === "attack") {
+        // Ataque del jugador: animacion, dano y validacion de estados.
         this.showMessage("Hero attacks!");
         this.playAttackAnimation("player", "enemy");
 
@@ -76,6 +82,7 @@ startTurn() {
 }
 
 enemyTurn() {
+  // Turno del enemigo.
   this.showMessage("Erio attacks!");
   this.playAttackAnimation("enemy", "player");
 
@@ -94,6 +101,7 @@ enemyTurn() {
 }
 
 finish(result = "quit") {
+  // Cierra combate, limpia recursos y devuelve resultado al overworld.
   document.removeEventListener("keydown", this.boundSpinHandler);
   this.stopBattleMusic();
   this.victorySound.pause();
@@ -103,6 +111,7 @@ finish(result = "quit") {
 }
 
 handleSpinInput(e) {
+  // Detecta secuencias de flechas para activar atajo secreto.
   if (this.hasSkipped || !this.element) {
     return;
   }
@@ -115,7 +124,7 @@ handleSpinInput(e) {
     return;
   }
 
-  // Clockwise tracking
+  // Seguimiento en sentido horario.
   if (key === cw[this.spinProgress.cwIndex]) {
     this.spinProgress.cwIndex = (this.spinProgress.cwIndex + 1) % 4;
     if (this.spinProgress.cwIndex === 0) {
@@ -126,7 +135,7 @@ handleSpinInput(e) {
     this.spinProgress.cwCount = 0;
   }
 
-  // Counterclockwise tracking
+  // Seguimiento en sentido antihorario.
   if (key === ccw[this.spinProgress.ccwIndex]) {
     this.spinProgress.ccwIndex = (this.spinProgress.ccwIndex + 1) % 4;
     if (this.spinProgress.ccwIndex === 0) {
@@ -143,6 +152,7 @@ handleSpinInput(e) {
 }
 
 skipBattle() {
+  // Salta la batalla tras combo secreto de giros.
   this.hasSkipped = true;
   const battleUI = this.element.querySelector(".battle-ui");
   battleUI.innerHTML = "";
@@ -170,6 +180,7 @@ skipBattle() {
 }
 
 triggerImmortalPhase() {
+  // Fase especial: enemigo no puede morir todavia (queda en 1 HP).
   this.immortalPhaseTriggered = true;
   const battleUI = this.element.querySelector(".battle-ui");
   battleUI.innerHTML = "";
@@ -196,6 +207,7 @@ triggerImmortalPhase() {
 }
 
 unlockSuperPower() {
+  // Desbloquea boton final que permite terminar la batalla.
   if (this.superPowerUnlocked) return;
   this.superPowerUnlocked = true;
   this.clearOverlayMessage();
@@ -218,16 +230,19 @@ unlockSuperPower() {
 }
 
 startBattleMusic() {
+  // Reproduce musica de combate desde el inicio.
   this.battleMusic.currentTime = 0;
   this.battleMusic.play().catch(() => {});
 }
 
 stopBattleMusic() {
+  // Detiene musica de combate y reinicia posicion.
   this.battleMusic.pause();
   this.battleMusic.currentTime = 0;
 }
 
 playHitSound() {
+  // Reproduce sonido de golpe (clon para evitar bloqueo de solape).
   const sfx = this.hitSound.cloneNode();
   sfx.volume = 1;
   sfx.play().catch(() => {});
@@ -240,12 +255,14 @@ playVictorySound() {
 }
 
 showMessage(text) {
+  // Mensaje en el panel inferior de batalla.
   this.clearOverlayMessage();
   const battleUI = this.element.querySelector(".battle-ui");
   battleUI.innerHTML = `<p class="battle-message">${text}</p>`;
 }
 
 showOverlayMessage(text) {
+  // Mensaje flotante sobre la escena de combate.
   const scene = this.element.querySelector(".battle-scene");
   this.clearOverlayMessage();
   const message = document.createElement("p");
@@ -262,6 +279,7 @@ clearOverlayMessage() {
 }
 
 playAttackAnimation(attackerSide, targetSide) {
+  // Aplica clases CSS de ataque/golpe para animacion visual.
   const scene = this.element.querySelector(".battle-scene");
   const attackClass = attackerSide === "player" ? "is-attacking-player" : "is-attacking-enemy";
   const hitClass = targetSide === "player" ? "is-hit-player" : "is-hit-enemy";
@@ -279,6 +297,7 @@ playAttackAnimation(attackerSide, targetSide) {
 }
 
   updateHP() {
+  // Sincroniza barras y texto de HP con estado actual.
   const enemyPercent =
     (this.activeCombatants.enemy.hp /
       this.activeCombatants.enemy.maxHp) * 100;
@@ -301,6 +320,7 @@ playAttackAnimation(attackerSide, targetSide) {
 }
 
   createTeams() {
+    // Crea equipos iniciales y define combatientes activos.
     this.playerTeam = new Team({
       team: "player",
       combatants: [
@@ -334,6 +354,7 @@ playAttackAnimation(attackerSide, targetSide) {
   }
 
   createElement() {
+  // Construye estructura DOM de la pantalla de batalla.
   this.element = document.createElement("div");
   this.element.classList.add("Battle");
 

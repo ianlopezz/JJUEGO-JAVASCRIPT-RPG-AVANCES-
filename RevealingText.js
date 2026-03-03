@@ -1,7 +1,10 @@
 class RevealingText {
   constructor(config) {
+    // Nodo donde se renderiza el texto.
     this.element = config.element;
+    // Texto completo a revelar.
     this.text = config.text;
+    // Velocidad base entre letras (ms).
     this.speed = config.speed || 60;
 
     this.timeout = null;
@@ -9,6 +12,7 @@ class RevealingText {
   }
 
   revealOneCharacter(list) {
+    // Revela el siguiente caracter y programa el siguiente paso.
     const next = list.splice(0,1)[0];
     next.span.classList.add("revealed");
 
@@ -22,6 +26,7 @@ class RevealingText {
   }
 
   warpToDone() {
+    // Fuerza mostrar todo el mensaje de inmediato.
     clearTimeout(this.timeout);
     this.isDone = true;
     this.element.querySelectorAll("span").forEach(s => {
@@ -30,6 +35,7 @@ class RevealingText {
   }
 
   init() {
+    // Crea un span por caracter para controlar efecto typewriter.
     let characters = [];
     this.text.split("").forEach(character => {
 

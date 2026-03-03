@@ -1,10 +1,12 @@
 class OverworldEvent {
   constructor({ map, event}) {
+    // Referencia al mapa actual y configuracion del evento a ejecutar.
     this.map = map;
     this.event = event;
   }
 
   stand(resolve) {
+    // Ordena a un personaje quedarse quieto mirando una direccion.
     const who = this.map.gameObjects[ this.event.who ];
     who.startBehavior({
       map: this.map
@@ -14,7 +16,7 @@ class OverworldEvent {
       time: this.event.time
     })
     
-    //poner  handler pa completar, then resolver the event
+    // Espera la confirmacion de fin para resolver la promesa del evento.
     
     const completeHandler = e => {
       if (e.detail.whoId === this.event.who) {
@@ -26,6 +28,7 @@ class OverworldEvent {
   }
 
   walk(resolve) {
+    // Ordena caminar un tile; retry intenta de nuevo si hay bloqueo temporal.
     const who = this.map.gameObjects[ this.event.who ];
     who.startBehavior({
       map: this.map
@@ -35,7 +38,7 @@ class OverworldEvent {
       retry: true
     })
 
-    //poner  handler pa completar, then resolve the event
+    // Espera evento de fin de movimiento para continuar la secuencia.
     const completeHandler = e => {
       if (e.detail.whoId === this.event.who) {
         document.removeEventListener("PersonWalkingComplete", completeHandler);
@@ -47,8 +50,10 @@ class OverworldEvent {
   }
 
   textMessage(resolve) {
+    // Muestra cuadro de texto y continua al cerrar.
 
     if (this.event.faceHero) {
+      // Hace que quien habla mire al heroe.
       const obj = this.map.gameObjects[this.event.faceHero];
       obj.direction = utils.oppositeDirection(this.map.gameObjects["hero"].direction);
     }
@@ -59,7 +64,7 @@ onComplete: () => resolve()
 })
 message.init(document.querySelector(".game-container"))
   }
-//transicion cambio de mapa
+// Evento de transicion visual y cambio de mapa.
 
  changeMap(resolve) {
 
@@ -74,11 +79,13 @@ message.init(document.querySelector(".game-container"))
   }
 
   setFlag(resolve) {
+    // Marca una bandera de historia para desbloquear contenido.
     this.map.overworld.storyFlags[this.event.flag] = true;
     resolve();
   }
 
   screamer(resolve) {
+    // Reproduce jumpscare en overlay. Si ya esta marcado, no repite.
     if (this.event.setFlag && this.map.overworld.storyFlags[this.event.setFlag]) {
       resolve();
       return;
@@ -102,6 +109,7 @@ message.init(document.querySelector(".game-container"))
     video.style.height = "100vh";
     video.style.objectFit = "cover";
 
+    // Limpieza comun al terminar/error del video.
     const cleanup = () => {
       video.pause();
       overlay.remove();
@@ -121,6 +129,7 @@ message.init(document.querySelector(".game-container"))
   }
 
  battle(resolve) {
+  // Inicia combate; al terminar, retorna control al overworld.
   this.map.overworld.pauseBackgroundMusic();
 
   const battle = new Battle({
@@ -138,6 +147,7 @@ message.init(document.querySelector(".game-container"))
 }
 
   init() {
+    // Dispatcher dinamico: ejecuta metodo segun event.type.
     return new Promise(resolve => {
       this[this.event.type](resolve)      
     })

@@ -1,10 +1,13 @@
 class Overworld {
  constructor(config) {
+   // Contenedor principal del juego y canvas de render.
    this.element = config.element;
    this.canvas = this.element.querySelector(".game-canvas");
    this.ctx = this.canvas.getContext("2d");
    this.map = null;
+   // Estado global de historia para desbloquear eventos/escenas.
    this.storyFlags = {};
+   // Audio de fondo del mapa actual.
    this.bgMusic = null;
    this.bgMusicStarted = false;
    this.currentMusicSrc = null;
@@ -12,12 +15,14 @@ class Overworld {
   }
 
  initBackgroundMusic(src) {
+   // Evita reiniciar pista si ya esta sonando la misma fuente.
    const requestedSrc = src || "";
    if (this.currentMusicSrc === requestedSrc && this.bgMusic) {
      return;
    }
 
-   if (this.bgMusic) {
+    // Si cambia la pista, reinicia y limpia la anterior.
+    if (this.bgMusic) {
      this.bgMusic.pause();
      this.bgMusic.currentTime = 0;
    }
@@ -28,13 +33,15 @@ class Overworld {
      return;
    }
 
-   this.bgMusic = new Audio(requestedSrc);
+    // Crea y configura el nuevo audio de fondo.
+    this.bgMusic = new Audio(requestedSrc);
    this.currentMusicSrc = requestedSrc;
    this.bgMusic.loop = requestedSrc !== "/imagenes/mapas/Hip%20Shop.mp3";
    this.bgMusic.volume = 0.6;
    this.bgMusic.preload = "auto";
 
-   if (!this.bgMusic.loop) {
+    // Caso especial: pista con loop manual.
+    if (!this.bgMusic.loop) {
      this.bgMusicManualLoopHandler = () => {
        this.bgMusic.currentTime = 0;
        this.bgMusic.play().catch(() => {});
@@ -53,7 +60,8 @@ class Overworld {
      }, { once: true });
    }
 
-   const tryPlay = () => {
+    // Intenta reproducir (navegadores requieren gesto de usuario).
+    const tryPlay = () => {
      this.bgMusic.play().then(() => {
        this.bgMusicStarted = true;
        window.removeEventListener("click", tryPlay);
@@ -81,14 +89,15 @@ class Overworld {
  }
 
   startGameLoop() {
+    // Bucle principal: actualiza estado y dibuja cada frame.
     const step = () => {
     
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      //camara para el personaje
+      // Camara centrada en el heroe.
       const cameraPerson = this.map.gameObjects.hero;
 
-      //actualizar obj
+      // Actualiza todos los objetos de juego.
       Object.values(this.map.gameObjects).forEach(object => {
         object.update({
           arrow: this.directionInput.direction,
@@ -96,17 +105,17 @@ class Overworld {
         })
       })
 
-      //Draw Lower layer
+      // Dibuja capa inferior del mapa.
       this.map.drawLowerImage(this.ctx, cameraPerson);
 
-      //Draw Game Objects
+      // Dibuja objetos ordenados por Y para simular profundidad.
       Object.values(this.map.gameObjects).sort((a,b) => {
         return a.y - b.y;
       }).forEach(object => {
         object.sprite.draw(this.ctx, cameraPerson);
       })
 
-      //Draw Upper layer
+      // Dibuja capa superior (por encima del jugador/NPCs).
       this.map.drawUpperImage(this.ctx, cameraPerson);
       
       requestAnimationFrame(() => {
@@ -117,6 +126,7 @@ class Overworld {
  }
 
  bindActionInput() {
+   // Tecla Enter para hablar/interactuar.
    new KeyPressListener("Enter", () => {
     
      this.map.checkForActionCutscene()
@@ -124,6 +134,7 @@ class Overworld {
  }
 
  bindHeroPositionCheck() {
+   // Cada vez que el heroe termina de caminar, revisa escenas por pisada.
    document.addEventListener("PersonWalkingComplete", e => {
      if (e.detail.whoId === "hero") {
        //Hero se mueve
@@ -133,14 +144,16 @@ class Overworld {
  }
 
  startMap(mapConfig) {
-  this.map = new OverworldMap(mapConfig);
+   // Carga mapa, enlaza overworld, monta objetos e inicia musica.
+   this.map = new OverworldMap(mapConfig);
   this.map.overworld = this;
   this.map.mountObjects();
   this.initBackgroundMusic(mapConfig.musicSrc || "");
  }
 
  init() {
-  this.startMap(window.OverworldMaps.DemoRoom);
+   // Inicio del juego: mapa inicial, controles y loop de render.
+   this.startMap(window.OverworldMaps.DemoRoom);
 
   this.bindActionInput();
   this.bindHeroPositionCheck();

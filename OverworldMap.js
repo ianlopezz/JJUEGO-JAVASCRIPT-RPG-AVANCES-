@@ -1,25 +1,38 @@
 class OverworldMap {
   constructor(config) {
+    // Referencia al controlador global del overworld (se asigna desde fuera).
     this.overworld = null;
+    // Objetos del mapa: heroe, NPCs y cualquier entidad interactiva.
     this.gameObjects = config.gameObjects;
+    // Escenas que se disparan al pisar coordenadas especificas.
     this.cutsceneSpaces = config.cutsceneSpaces || {};
+    // Escenas que se disparan al interactuar (ej. tecla de accion) en un tile.
     this.actionSpaces = config.actionSpaces || {};
+    // Tiles bloqueados para colision.
     this.walls = config.walls || {};
+    // Tamano logico del mapa en tiles.
     this.mapSize = config.mapSize || null;
+    // Rectangulos de pared para generar colision en bloque.
     this.wallRects = config.wallRects || [];
+    // Limites caminables opcionales (min/max en tiles).
     this.walkableBounds = config.walkableBounds || null;
 
+    // Capa visual inferior (suelo/base).
     this.lowerImage = new Image();
     this.lowerImage.src = config.lowerSrc;
 
+    // Capa visual superior (objetos por encima del jugador).
     this.upperImage = new Image();
     this.upperImage.src = config.upperSrc;
 
+    // Evita ejecutar escenas en paralelo.
     this.isCutscenePlaying = false;
+    // Convierte wallRects en coordenadas concretas dentro de this.walls.
     this.applyWallRects();
   }
 
   drawLowerImage(ctx, cameraPerson) {
+    // Dibuja la capa inferior desplazada segun la camara centrada en cameraPerson.
     ctx.drawImage(
       this.lowerImage, 
       utils.withGrid(10.5) - cameraPerson.x, 
@@ -28,6 +41,7 @@ class OverworldMap {
   }
 
   drawUpperImage(ctx, cameraPerson) {
+    // Dibuja la capa superior con el mismo offset para mantener alineacion.
     ctx.drawImage(
       this.upperImage, 
       utils.withGrid(10.5) - cameraPerson.x, 
@@ -36,6 +50,7 @@ class OverworldMap {
   } 
 
   isSpaceTaken(currentX, currentY, direction) {
+    // Calcula la proxima posicion y valida limites + colision por paredes.
     const {x,y} = utils.nextPosition(currentX, currentY, direction);
     if (this.isOutOfBounds(x, y)) {
       return true;
@@ -44,6 +59,7 @@ class OverworldMap {
   }
 
   isOutOfBounds(x, y) {
+    // Comprueba si un punto en pixeles cae fuera del area caminable.
     const tileBounds = this.getWalkableTileBounds();
     if (!tileBounds) {
       return false;
@@ -57,10 +73,12 @@ class OverworldMap {
   }
 
   getWalkableTileBounds() {
+    // Prioridad 1: limites explicitos definidos en configuracion.
     if (this.walkableBounds) {
       return this.walkableBounds;
     }
 
+    // Prioridad 2: si hay mapSize, usar 0..width/height-1.
     if (this.mapSize && this.mapSize.width && this.mapSize.height) {
       return {
         minX: 0,
@@ -70,6 +88,7 @@ class OverworldMap {
       };
     }
 
+    // Prioridad 3: inferir dimensiones desde la imagen del mapa.
     const width = this.lowerImage.naturalWidth || this.lowerImage.width;
     const height = this.lowerImage.naturalHeight || this.lowerImage.height;
     if (!width || !height) {
@@ -85,6 +104,7 @@ class OverworldMap {
   }
 
   applyWallRects() {
+    // Rellena todas las coordenadas de cada rectangulo como tiles bloqueados.
     this.wallRects.forEach(rect => {
       const x1 = Math.min(rect.x1, rect.x2);
       const x2 = Math.max(rect.x1, rect.x2);
@@ -100,6 +120,7 @@ class OverworldMap {
   }
 
   mountObjects() {
+    // Asigna id y monta cada objeto para que registre sprites/estado inicial.
     Object.keys(this.gameObjects).forEach(key => {
 
       let object = this.gameObjects[key];
@@ -110,7 +131,7 @@ class OverworldMap {
 
     })
   }
-//evento 
+// Ejecuta una secuencia de eventos (dialogo, movimiento, combate, etc).
   async startCutscene(events) {
     this.isCutscenePlaying = true;
 
@@ -124,11 +145,12 @@ class OverworldMap {
 
     this.isCutscenePlaying = false;
 
-    //reset npc
+    // Reinicia comportamiento de NPCs despues de la escena.
     Object.values(this.gameObjects).forEach(object => object.doBehaviorEvent(this))
   }
 
   checkForActionCutscene() {
+    // Busca escenas al interactuar con un NPC/objeto delante del heroe.
     const hero = this.gameObjects["hero"];
     const nextCoords = utils.nextPosition(hero.x, hero.y, hero.direction);
     const match = Object.values(this.gameObjects).find(object => {
@@ -151,6 +173,7 @@ class OverworldMap {
       return;
     }
 
+    // Si no hay NPC con dialogo, revisa espacios de accion por coordenada.
     const actionScenarios = this.actionSpaces[`${nextCoords.x},${nextCoords.y}`];
     if (!this.isCutscenePlaying && actionScenarios) {
       const scenario = actionScenarios.find(option => {
@@ -168,7 +191,7 @@ class OverworldMap {
       }
     }
   }
-// cinematica mov segun pas
+// Revisa escenas que se disparan automaticamente al pisar un tile.
   checkForFootstepCutscene() {
     const hero = this.gameObjects["hero"];
     const scenarios = this.cutsceneSpaces[ `${hero.x},${hero.y}` ];
@@ -190,12 +213,15 @@ class OverworldMap {
   }
 
   addWall(x,y) {
+    // Marca un tile como bloqueado.
     this.walls[`${x},${y}`] = true;
   }
   removeWall(x,y) {
+    // Libera un tile bloqueado.
     delete this.walls[`${x},${y}`]
   }
   moveWall(wasX, wasY, direction) {
+    // Mueve una pared dinamica de su posicion anterior a la nueva.
     this.removeWall(wasX, wasY);
     const {x,y} = utils.nextPosition(wasX, wasY, direction);
     this.addWall(x,y);
@@ -203,13 +229,16 @@ class OverworldMap {
 
 }
 
+// Registro global de mapas disponibles en el juego.
 window.OverworldMaps = {
+  // Mapa inicial / sala principal.
   DemoRoom: {
     lowerSrc: "/imagenes/mapas/DemoLower.png",
     upperSrc: "/imagenes/mapas/DemoUpper.png",
     musicSrc: "/imagenes/sans.mp3",
     mapSize: { width: 12, height: 12 },
     walkableBounds: { minX: 1, minY: 3, maxX: 10, maxY: 10 },
+    // Entidades presentes en este mapa.
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,
@@ -221,6 +250,7 @@ window.OverworldMaps = {
         y: utils.withGrid(9),
         src: "/imagenes/personajes/erio.png",
         talking: [
+          // Opcion activa antes de derrotar a Erio.
           {
             unlessFlag: "defeatedErio2",
             events: [
@@ -229,6 +259,7 @@ window.OverworldMaps = {
               { type: "textMessage", text: "que....................................................................................." }
             ]
           },
+          // Opcion activa despues de derrotar a Erio.
           {
             requiresFlag: "defeatedErio2",
             events: [
@@ -243,6 +274,7 @@ window.OverworldMaps = {
         src: "/imagenes/personajes/npc2.png",
       }),
     },
+    // Paredes puntuales definidas tile por tile.
     walls: {
       [utils.asGridCoord(1,10)] : true,
       [utils.asGridCoord(2,10)] : true,
@@ -258,6 +290,7 @@ window.OverworldMaps = {
       [utils.asGridCoord(7,7)] : true,
       [utils.asGridCoord(8,7)] : true,
     },
+    // Escenas por pisada (coordenada del heroe).
     cutsceneSpaces: {
       [utils.asGridCoord(7,4)]: [
         {
@@ -308,6 +341,7 @@ window.OverworldMaps = {
             { who: "hero", type: "walk",  direction: "up" }
           ]
         },
+        // Tras la pelea, permite cambiar de mapa a Kitchen.
         {
           requiresFlag: "defeatedErio2",
           events: [
@@ -316,6 +350,7 @@ window.OverworldMaps = {
         }
       ]
     },
+    // Escenas por accion/interaccion en coordenadas concretas.
     actionSpaces: {
       [utils.asGridCoord(7,2)]: [
         {
@@ -328,12 +363,14 @@ window.OverworldMaps = {
       ]
     }
   },
+  // Segundo mapa: cocina/almacen.
   Kitchen: {
     lowerSrc: "imagenes/mapas/KitchenLower.png",
     upperSrc: "/imagenes/mapas/KitchenUpper.png",
     musicSrc: "/imagenes/mapas/Hip%20Shop.mp3",
     mapSize: { width: 14, height: 12 },
     walkableBounds: { minX: 1, minY: 4, maxX: 12, maxY: 10 },
+    // Paredes puntuales.
     walls: {
       [utils.asGridCoord(1,10)] : true,
       [utils.asGridCoord(2,10)] : true,
@@ -347,6 +384,7 @@ window.OverworldMaps = {
       [utils.asGridCoord(11,10)] : true,
       [utils.asGridCoord(12,10)] : true,
     },
+    // Paredes por rectangulos para simplificar bloques grandes.
     wallRects: [
       { x1: 1, y1: 4, x2: 3, y2: 4 },
       { x1: 5, y1: 4, x2: 10, y2: 4 },
@@ -358,6 +396,7 @@ window.OverworldMaps = {
       { x1: 1, y1: 9, x2: 2, y2: 9 },
       { x1: 9, y1: 9, x2: 10, y2: 9 }
     ],
+    // Objetos y NPCs del mapa Kitchen.
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,
@@ -384,6 +423,7 @@ window.OverworldMaps = {
       })
       
     },
+    // Salida de vuelta al mapa DemoRoom.
     cutsceneSpaces: {
       [utils.asGridCoord(5,10)]: [
         {
@@ -393,6 +433,7 @@ window.OverworldMaps = {
         }
       ]
     },
+    // Interacciones en la zona de pizzas.
     actionSpaces: {
       [utils.asGridCoord(1,6)]: [
         {
