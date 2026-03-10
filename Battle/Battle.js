@@ -48,7 +48,7 @@ startTurn() {
     combatant: this.activeCombatants.player,
     onComplete: (action) => {
       if (action === "attack") {
-        // Ataque del jugador: animacion, dano y validacion de estados.
+        // Ataque del jugador: animacion, daño y estados.
         this.showMessage("Hero attacks!");
         this.playAttackAnimation("player", "enemy");
 
@@ -71,8 +71,8 @@ startTurn() {
           } else {
             this.stopBattleMusic();
             this.playVictorySound();
-            this.showMessage("You won!");
-            setTimeout(() => this.finish("win"), this.victoryDelay);
+            this.showMessage("Has derrotado a Erios!");
+            setTimeout(() => this.finish(":3"), this.victoryDelay);
           }
         }, this.impactDelay);
       }
@@ -83,7 +83,7 @@ startTurn() {
 
 enemyTurn() {
   // Turno del enemigo.
-  this.showMessage("Erio attacks!");
+  this.showMessage("Erio ataca!");
   this.playAttackAnimation("enemy", "player");
 
   setTimeout(() => {
@@ -94,7 +94,7 @@ enemyTurn() {
     if (!this.activeCombatants.player.isDead) {
       this.startTurn();
     } else {
-      this.showMessage("You were defeated.");
+      this.showMessage("te han derrotado .");
       setTimeout(() => this.finish("lose"), this.turnDelay);
     }
   }, this.impactDelay);
@@ -188,7 +188,7 @@ triggerImmortalPhase() {
   const lines = [
     "No puedes derrotarme...",
     "No importa cuanto ataques, no voy a caer.",
-    "JAJAJAJAJA"
+    "JAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJA"
   ];
 
   let index = 0;
@@ -224,7 +224,7 @@ unlockSuperPower() {
     this.updateHP();
     this.stopBattleMusic();
     this.playVictorySound();
-    this.showMessage("Erio fue derrotado por tu SUPER POWER.");
+    this.showMessage("Erio fue derrotado por conveniencia del guión.");
     setTimeout(() => this.finish("win"), this.victoryDelay);
   }, { once: true });
 }
@@ -339,8 +339,8 @@ playAttackAnimation(attackerSide, targetSide) {
       combatants: [
         new Combatant({
           name: "NPC 1",
-          hp: 80,
-          maxHp: 80,
+          hp: 200,
+          maxHp: 200,
           isPlayer: false,
           src: "imagenes/personajes/erio2.png"
         })

@@ -32,12 +32,12 @@ class Sprite {
     this.currentAnimation = "idle-right"; // config.currentAnimation || "idle-down";
     this.currentAnimationFrame = 0;
 
-    this.animationFrameLimit = config.animationFrameLimit || 8;
+    this.animationFrameLimit = config.animationFrameLimit || 16;
     this.animationFrameProgress = this.animationFrameLimit;
     
 
     //señala GameObject
-    // Referencia al GameObject duenio del sprite (posicion/estado).
+    // Referencia al GameObject dueño del sprite (posicion/estado).
     this.gameObject = config.gameObject;
   }
 

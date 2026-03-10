@@ -303,7 +303,7 @@ window.OverworldMaps = {
             { type: "textMessage", text:"Porque no?."},
             { type: "textMessage", text:"porque ese de abajo es mi jefe."},
             { type: "textMessage", text:"y para serte sincero no me paga lo suficiente."},
-            { type: "textMessage", text:"para aguantar niÃ±os jugando en su restaurante."},
+            { type: "textMessage", text:"para aguantar niños jugando en su restaurante."},
             { type: "textMessage", text:"hagamos un trato."},
             { type: "textMessage", text:"Si derrotas a Erio, te dejo entrar."},
             { type: "textMessage", text:"tal vez encuentres algo interesante alli adentro si presionas ENTER"},
@@ -363,7 +363,7 @@ window.OverworldMaps = {
       ]
     }
   },
-  // Segundo mapa: cocina/almacen.
+  // Segundo mapa: cocina.
   Kitchen: {
     lowerSrc: "imagenes/mapas/KitchenLower.png",
     upperSrc: "/imagenes/mapas/KitchenUpper.png",
